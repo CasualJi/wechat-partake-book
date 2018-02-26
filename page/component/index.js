@@ -18,6 +18,38 @@ Page({
     tempFilePaths: [],
     index: 0
   },
+  onPullDownRefresh(){
+    wx.showNavigationBarLoading() //在标题栏中显示加载
+    // complete
+    var that = this
+    //获取最新的书籍
+    wx.request({
+      url: 'https://jihangyu.cn/book/getBookByTag/lasted',
+      success(res) {
+        if (res.data.code == 200) {
+          var lastedList = res.data.data
+          for (var i = 0; i < lastedList.length; i++) {
+            lastedList[i].bImg = 'http://p4a0xyee4.bkt.clouddn.com/' + lastedList[i].bImg.split(",")[0]
+          }
+          console.log(lastedList)
+          that.setData({
+            lastedList: lastedList
+          })
+      
+          wx.hideNavigationBarLoading() //完成停止加载
+          wx.stopPullDownRefresh() //停止下拉刷新
+        } else {
+       
+          wx.showToast({
+            title: res.data.msg,
+          })
+          wx.hideNavigationBarLoading() //完成停止加载
+          wx.stopPullDownRefresh() //停止下拉刷新
+        }
+      }
+    })
+    
+  },
   close(){
     this.setData({
       hidden:true
