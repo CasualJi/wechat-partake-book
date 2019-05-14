@@ -34,8 +34,9 @@ Page({
                'user-token': user_token,
                "Content-Type": "application/x-www-form-urlencoded", // 默认值
              },
-             data: {
-               bId: formData.bid
+             data: { 
+               bId: formData.bid,
+               userId: formData.fromUid
              },
              method: "POST",
              success(res) {
